@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anagram Game</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Start Game Popup -->
+    <div id="start-popup" class="glass-container p-8 rounded-2xl shadow-2xl text-center max-w-md w-full mx-auto fade-in">
+        <h1 class="text-4xl font-bold mb-4">Anagram Arena</h1>
+        <p class="mb-6">
+            Find as many words as you can from the letters of the source word in 60 seconds.
+        </p>
+        <button id="start-button" class="button-primary py-3 px-8 rounded-lg text-lg w-full">
+            Start Game
+        </button>
+    </div>
+
+    <!-- Main Game Container -->
+    <div id="game-container" class="hidden w-full max-w-2xl mx-auto">
+        <div class="glass-container p-6 rounded-2xl shadow-lg flex flex-col gap-6">
+            <!-- Header: Score & Timer -->
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-lg font-bold">Score</h2>
+                    <span id="total-score" class="text-4xl font-bold accent-text">0</span>
+                </div>
+                <div>
+                    <h2 class="text-lg font-bold text-right">Time</h2>
+                    <span id="timer" class="text-4xl font-bold accent-text">60</span>
+                </div>
+            </div>
+
+            <!-- Guessed Words (shows last 3) -->
+            <div id="guessed-words-container" class="h-28 bg-black/20 p-3 rounded-lg flex flex-col justify-end">
+                <p id="guessed-words-placeholder" class="text-center text-gray-400">Guessed words will appear here...</p>
+                <div id="guessed-words-list"></div>
+            </div>
+
+            <!-- Guessing Area -->
+            <div class="text-center">
+                <p class="mb-3">Available Letters:</p>
+                <div id="char-container" class="flex justify-center gap-2 md:gap-3">
+                    <!-- Characters will be injected here -->
+                </div>
+            </div>
+            
+            <!-- Custom Input Display -->
+            <div id="guess-display-container" class="relative" onclick="document.getElementById('word-input').focus()">
+                <div id="guess-display" class="flex justify-center gap-2 md:gap-3">
+                    <!-- Input boxes will be injected here -->
+                </div>
+                <input type="text" id="word-input" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </div>
+        </div>
+    </div>
+
+    <!-- Game Over Screen -->
+    <div id="game-over-screen" class="hidden glass-container p-8 rounded-2xl shadow-2xl text-center max-w-2xl w-full mx-auto fade-in">
+        <div class="flex justify-between items-start">
+            <div class="text-left">
+                <h1 class="text-5xl font-bold mb-2">Time's Up!</h1>
+                <p class="text-xl mb-4">Your Final Score:</p>
+            </div>
+            <p id="final-score" class="text-7xl font-bold accent-text">0</p>
+        </div>
+        <div class="flex justify-between items-center mt-6 mb-3">
+            <h3 class="text-xl font-semibold">Words You Found:</h3>
+            <button id="copy-button" class="bg-black/20 hover:bg-black/40 text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                Copy Words
+            </button>
+        </div>
+        <div id="final-words-list" class="w-full max-h-64 text-lg p-4 rounded-lg overflow-y-auto bg-black/20">
+            <!-- Final word list will be injected here -->
+        </div>
+    </div>
+
+    <!-- Invalid Word Notification -->
+    <div id="notification" class="fixed top-5 bg-red-500 text-white py-2 px-5 rounded-lg shadow-lg opacity-0 transform -translate-y-10">
+        Invalid Word!
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
