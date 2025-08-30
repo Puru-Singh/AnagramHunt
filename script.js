@@ -13,7 +13,7 @@ const possibleWords = [
     'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor',
     'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
     'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','point','pointer','pone','pont','pontie',
-    'pore','porn','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
+    'pore','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
     'repot','ret','rin','rip','ripe','ripen','rite','roe','ropent','rope','rot','rote','roti','ten','tenio','tenor','tern',
     'tie','tin','tine','tip','tire','tiro','toe','ton','tone','toner','tonier','top','tope','toper','topi','tor','tore','tori',
     'torn','trine','trio','trip','tripe','tron','trope','tropine'
