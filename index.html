@@ -88,6 +88,19 @@
         Invalid Word!
     </div>
 
+    <div id="popup-overlay" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center">
+        <div id="name-popup" class="glass-container p-8 rounded-2xl shadow-2xl text-center max-w-sm w-full mx-auto fade-in">
+            <h2 class="text-2xl font-bold mb-4">High Score!</h2>
+            <p class="mb-6">Please enter your name for the leaderboard.</p>
+            <form id="name-form">
+                <input type="text" id="name-input" class="w-full bg-black/40 border-2 border-white/20 rounded-lg py-3 px-4 text-center text-lg focus:outline-none focus:border-accent-color transition-colors" placeholder="Enter your name..." required maxlength="15">
+                <button type="submit" class="button-primary py-3 px-8 rounded-lg text-lg w-full mt-4">
+                    Submit Score
+                </button>
+            </form>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

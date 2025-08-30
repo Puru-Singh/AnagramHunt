@@ -42,7 +42,9 @@ const finalScoreDisplay = document.getElementById('final-score');
 const finalWordsList = document.getElementById('final-words-list');
 const notification = document.getElementById('notification');
 const copyButton = document.getElementById('copy-button');
-
+const popupOverlay = document.getElementById('popup-overlay');
+const nameForm = document.getElementById('name-form');
+const nameInput = document.getElementById('name-input');
 /**
  * Initializes the game UI.
  */
@@ -194,15 +196,59 @@ async function fetchAndDisplayLeaderboard() {
 }
 
 // Replace your existing endGame function with this new version
+// async function endGame() {
+//     clearInterval(timerId);
+//     gameContainer.classList.add('hidden');
+//     gameOverScreen.classList.remove('hidden');
+
+//     finalScoreDisplay.textContent = totalScore;
+//     const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
+
+//     // ... (keep the existing code that populates finalWordsList) ...
+//     if (sortedWords.length > 0) {
+//          finalWordsList.innerHTML = `
+//             <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
+//                 <span>Word</span>
+//                 <span class="text-center">Points</span>
+//                 <span class="text-right">Time Taken</span>
+//             </div>
+//             ${sortedWords.map(([word, data]) =>
+//             `<div class="grid grid-cols-3 gap-x-4 text-left py-1">
+//                 <span>${word}</span>
+//                 <span class="font-bold accent-text text-center">${data.points}</span>
+//                 <span class="text-gray-400 text-right">+${data.time}s</span>
+//             </div>`
+//         ).join('')}`;
+//      } else {
+//         finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
+//         copyButton.classList.add('hidden'); // Hide copy button if no words
+//     }
+
+//     // --- NEW CODE FOR LEADERBOARD ---
+//     if (totalScore > 0) {
+//         const playerName = prompt("Time's up! Enter your name for the leaderboard:");
+//         if (playerName) {
+//             await fetch('/api/add-score', {
+//                 method: 'POST',
+//                 headers: { 'Content-Type': 'application/json' },
+//                 body: JSON.stringify({ name: playerName.trim(), score: totalScore }),
+//             });
+//         }
+//     }
+
+//     // Fetch and show the leaderboard after submitting the score
+//     fetchAndDisplayLeaderboard();
+// }
+
+// Replace your existing endGame function with this new version
 async function endGame() {
     clearInterval(timerId);
     gameContainer.classList.add('hidden');
     gameOverScreen.classList.remove('hidden');
 
     finalScoreDisplay.textContent = totalScore;
+    // The code to display your found words remains the same...
     const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
-
-    // ... (keep the existing code that populates finalWordsList) ...
     if (sortedWords.length > 0) {
          finalWordsList.innerHTML = `
             <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
@@ -219,13 +265,13 @@ async function endGame() {
         ).join('')}`;
      } else {
         finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
-        copyButton.classList.add('hidden'); // Hide copy button if no words
+        copyButton.classList.add('hidden');
     }
 
-    // --- NEW CODE FOR LEADERBOARD ---
+    // --- UPDATED LEADERBOARD LOGIC ---
     if (totalScore > 0) {
-        const playerName = prompt("Time's up! Enter your name for the leaderboard:");
-        if (playerName) {
+        const playerName = await getPlayerName(); // Wait for user to submit name
+        if (playerName && playerName.trim()) {
             await fetch('/api/add-score', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -260,6 +306,24 @@ function copyResultsToClipboard() {
     setTimeout(() => {
         copyButton.textContent = 'Copy Words';
     }, 2000);
+}
+
+/**
+ * Shows a custom popup to get the player's name.
+ * Returns a Promise that resolves with the entered name.
+ */
+function getPlayerName() {
+    popupOverlay.classList.remove('hidden');
+    nameInput.focus();
+
+    return new Promise((resolve) => {
+        nameForm.addEventListener('submit', (e) => {
+            e.preventDefault(); // Stop the form from reloading the page
+            const playerName = nameInput.value;
+            popupOverlay.classList.add('hidden');
+            resolve(playerName);
+        }, { once: true }); // Important: listener runs only once
+    });
 }
 
 // --- INITIALIZATION & EVENT LISTENERS ---

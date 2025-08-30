@@ -88,3 +88,6 @@ h1, h2, h3 { color: var(--accent-color); }
 #final-words-list::-webkit-scrollbar-thumb:hover {
     background: #D84040;
 }
+#popup-overlay {
+    z-index: 50;
+}
