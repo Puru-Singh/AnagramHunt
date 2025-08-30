@@ -2,14 +2,21 @@
 const sourceWord = 'POINTER';
 const uniqueChars = [...new Set(sourceWord.split(''))].sort();
 const possibleWords = [
-    'eon', 'eir', 'ent', 'eon', 'ern', 'ion', 'ire', 'net', 'nip', 'nit', 'nor', 'not', 'one', 'ope', 'opt', 'ore',
-    'ort', 'pen', 'per', 'pet', 'pie', 'pin', 'pit', 'poi', 'pon', 'pot', 'pro', 'rei', 'rep', 'ret', 'rin', 'rip',
-    'roe', 'rot', 'ten', 'tie', 'tin', 'tip', 'toe', 'ton', 'top', 'tor', 'tri', 'inept', 'inter', 'intro', 'irone',
-    'netop', 'nitro', 'noire', 'niter', 'nitre', 'nope', 'note', 'often', 'ofter', 'opine', 'opter', 'orient', 'orpin',
-    'pein', 'pent', 'peon', 'peri', 'pert', 'pine', 'pinto', 'pion', 'pirn', 'poet', 'point', 'ponte', 'pore', 'port',
-    'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
-    'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
-    'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
+    // 'eon', 'eir', 'ent', 'eon', 'ern', 'ion', 'ire', 'net', 'nip', 'nit', 'nor', 'not', 'one', 'ope', 'opt', 'ore',
+    // 'ort', 'pen', 'per', 'pet', 'pie', 'pin', 'pit', 'poi', 'pon', 'pot', 'pro', 'rei', 'rep', 'ret', 'rin', 'rip',
+    // 'roe', 'rot', 'ten', 'tie', 'tin', 'tip', 'toe', 'ton', 'top', 'tor', 'tri', 'inept', 'inter', 'intro', 'irone',
+    // 'netop', 'nitro', 'noire', 'niter', 'nitre', 'nope', 'note', 'often', 'ofter', 'opine', 'opter', 'orient', 'orpin',
+    // 'pein', 'pent', 'peon', 'peri', 'pert', 'pine', 'pinto', 'pion', 'pirn', 'poet', 'point', 'ponte', 'pore', 'port',
+    // 'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
+    // 'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
+    // 'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
+    'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor',
+    'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
+    'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','pointer','pone','pont','pontie',
+    'pore','porn','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
+    'repot','ret','rin','rip','ripe','ripen','rite','roe','ropent','rope','rot','rote','roti','ten','tenio','tenor','tern',
+    'tie','tin','tine','tip','tire','tiro','toe','ton','tone','toner','tonier','top','tope','toper','topi','tor','tore','tori',
+    'torn','trine','trio','trip','tripe','tron','trope','tropine'
 ].map(word => word.toLowerCase());
 
 // --- STATE VARIABLES ---
