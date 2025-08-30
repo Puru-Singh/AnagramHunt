@@ -197,9 +197,22 @@ async function endGame() {
 
     // ... (keep the existing code that populates finalWordsList) ...
     if (sortedWords.length > 0) {
-         // ... existing code ...
-    } else {
-         // ... existing code ...
+         finalWordsList.innerHTML = `
+            <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
+                <span>Word</span>
+                <span class="text-center">Points</span>
+                <span class="text-right">Time Taken</span>
+            </div>
+            ${sortedWords.map(([word, data]) =>
+            `<div class="grid grid-cols-3 gap-x-4 text-left py-1">
+                <span>${word}</span>
+                <span class="font-bold accent-text text-center">${data.points}</span>
+                <span class="text-gray-400 text-right">+${data.time}s</span>
+            </div>`
+        ).join('')}`;
+     } else {
+        finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
+        copyButton.classList.add('hidden'); // Hide copy button if no words
     }
 
     // --- NEW CODE FOR LEADERBOARD ---
