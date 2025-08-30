@@ -162,14 +162,40 @@ function showNotification() {
 /**
  * Ends the game and shows the final score.
  */
-function endGame() {
+// At the top of the file, add this new function
+async function fetchAndDisplayLeaderboard() {
+    const leaderboardList = document.getElementById('leaderboard-list');
+    try {
+        // The URL will be relative to your Vercel deployment
+        const response = await fetch('/api/leaderboard'); 
+        const scores = await response.json();
+
+        if (scores.length === 0) {
+            leaderboardList.innerHTML = '<p class="text-gray-400">No scores yet. Be the first!</p>';
+            return;
+        }
+
+        leaderboardList.innerHTML = scores.map((entry, index) => `
+            <div class="flex justify-between items-center py-1">
+                <span>${index + 1}. ${entry.name}</span>
+                <span class="font-bold accent-text">${entry.score}</span>
+            </div>
+        `).join('');
+    } catch (error) {
+        leaderboardList.innerHTML = '<p class="text-red-400">Could not load scores.</p>';
+    }
+}
+
+// Replace your existing endGame function with this new version
+async function endGame() {
     clearInterval(timerId);
     gameContainer.classList.add('hidden');
     gameOverScreen.classList.remove('hidden');
-    
+
     finalScoreDisplay.textContent = totalScore;
     const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
-    
+
+    // ... (keep the existing code that populates finalWordsList) ...
     if (sortedWords.length > 0) {
          finalWordsList.innerHTML = `
             <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
@@ -184,10 +210,25 @@ function endGame() {
                 <span class="text-gray-400 text-right">+${data.time}s</span>
             </div>`
         ).join('')}`;
-    } else {
+     } else {
         finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
         copyButton.classList.add('hidden'); // Hide copy button if no words
     }
+
+    // --- NEW CODE FOR LEADERBOARD ---
+    if (totalScore > 0) {
+        const playerName = prompt("Time's up! Enter your name for the leaderboard:");
+        if (playerName) {
+            await fetch('/api/add-score', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name: playerName.trim(), score: totalScore }),
+            });
+        }
+    }
+
+    // Fetch and show the leaderboard after submitting the score
+    fetchAndDisplayLeaderboard();
 }
 
 /**
