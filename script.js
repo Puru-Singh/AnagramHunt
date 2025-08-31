@@ -26,6 +26,11 @@ let timeLeft = 60;
 let timerId = null;
 let lastGuessTime = 0; // Time of the last successful guess
 
+// Variables for maintaining streak.
+let streakCount = 0;
+let lastGuessTimestamp = 0; // Tracks the precise time of the last guess
+let isStreakActive = false;
+
 // --- DOM ELEMENTS ---
 const startPopup = document.getElementById('start-popup');
 const startButton = document.getElementById('start-button');
@@ -94,24 +99,57 @@ function handleWordSubmit(e) {
     if (!rawWord) return;
 
     const processedWord = preprocessWord(rawWord);
-    
+
     if (possibleWords.includes(processedWord) && !guessedWords.hasOwnProperty(processedWord)) {
+        // --- STREAK LOGIC START ---
+        const now = performance.now(); // Get high-precision timestamp
+        const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000; // Time in seconds
+
+        // If it's the first guess or the player was too slow, reset streak
+        if (lastGuessTimestamp === 0 || timeSinceLastGuess > 3) {
+            streakCount = 1;
+            isStreakActive = false;
+        } else {
+            // Player was fast enough, increment streak
+            streakCount++;
+        }
+        lastGuessTimestamp = now; // Update timestamp for the next guess
+
+        let bonusPoints = 0;
+        // Check if a new streak has just been achieved
+        if (!isStreakActive && streakCount >= 3) {
+            isStreakActive = true;
+            // Retroactively award bonus points for the 3 words that started the streak
+            totalScore += 3; 
+            // We need to find the keys of the last 2 guessed words to update their bonus
+            const guessedKeys = Object.keys(guessedWords);
+            const lastTwoKeys = guessedKeys.slice(-2);
+            lastTwoKeys.forEach(key => {
+                guessedWords[key].bonus = 1;
+            });
+        }
+
+        if (isStreakActive) {
+            bonusPoints = 1;
+        }
+        // --- STREAK LOGIC END ---
+
         const points = processedWord.length;
-        totalScore += points;
-        
+        totalScore += points; // Add base points
+
         const currentTime = 60 - timeLeft;
         const timeTaken = currentTime - lastGuessTime;
-        lastGuessTime = currentTime; // Update for the next guess
+        lastGuessTime = currentTime;
 
-        // Store points and the time it was guessed
-        guessedWords[processedWord] = { points: points, time: timeTaken };
+        // Store all word data, including bonus
+        guessedWords[processedWord] = { points: points, bonus: bonusPoints, time: timeTaken };
         updateScoreboard();
+
     } else {
         showNotification();
     }
 
     wordInput.value = '';
-    //updateGuessDisplay();
 }
 
 /**
@@ -119,22 +157,27 @@ function handleWordSubmit(e) {
  */
 function updateScoreboard() {
     totalScoreDisplay.textContent = totalScore;
-    
+
     if(Object.keys(guessedWords).length > 0) {
         guessedWordsPlaceholder.classList.add('hidden');
     }
 
-    const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
-    
-    // Get only the last 3 words
-    const recentWords = sortedWords.slice(-3);
+    // Get the last 3 words to display
+    const recentWords = Object.entries(guessedWords).slice(-3);
 
-    guessedWordsList.innerHTML = recentWords.map(([word, data]) =>
-        `<div class="flex justify-between items-center p-1.5 rounded-md animate-fade-in-short">
-            <span>${word}</span>
-            <span class="font-semibold accent-text">${data.points}</span>
-        </div>`
-    ).join('');
+    guessedWordsList.innerHTML = recentWords.map(([word, data]) => {
+        const displayPoints = data.points + data.bonus;
+        const bonusIndicator = data.bonus > 0 
+            ? `<span class="text-green-400 font-bold text-sm ml-2">+1</span>` 
+            : '';
+
+        return `
+            <div class="flex justify-between items-center p-1.5 rounded-md animate-fade-in-short">
+                <span>${word}</span>
+                <span class="font-semibold accent-text">${displayPoints} ${bonusIndicator}</span>
+            </div>
+        `;
+    }).join('');
 }
 
 /**
