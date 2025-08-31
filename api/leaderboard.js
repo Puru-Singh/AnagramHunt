@@ -17,15 +17,27 @@ const getDb = async () => {
 
 export default async function handler(req, res) {
   try {
-    // --- Daily Leaderboard Logic ---
+    // --- Timezone-Specific Daily Leaderboard Logic ---
+    
+    // 1. Get current time in UTC
     const now = new Date();
-    const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0);
-    const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59);
+
+    // 2. Calculate the IST offset in milliseconds (5 hours * 60 mins + 30 mins) * 60 secs * 1000 ms
+    const istOffset = (5 * 60 + 30) * 60 * 1000;
+    
+    // 3. Create a new Date object for IST
+    const istTime = new Date(now.getTime() + istOffset);
+
+    // 4. Calculate the start and end of the day in UTC, based on the IST date
+    const startOfDayUTC = new Date(istTime.toISOString().split('T')[0] + 'T00:00:00.000Z');
+    // Adjust for the offset to get the correct start time in UTC
+    const startOfDay = new Date(startOfDayUTC.getTime() - istOffset);
+    const endOfDay = new Date(startOfDay.getTime() + (24 * 60 * 60 * 1000) - 1); // 24 hours minus 1 millisecond
 
     const db = await getDb();
     const collection = db.collection('scores');
 
-    // Find scores created within the current day
+    // 5. Find scores created within the calculated UTC range for the IST day
     const topScores = await collection
       .find({
         createdAt: {
