@@ -282,16 +282,16 @@ function showNotification() {
 /**
  * Ends the game and shows the final score.
  */
-// At the top of the file, add this new function
 async function fetchAndDisplayLeaderboard() {
     const leaderboardList = document.getElementById('leaderboard-list');
+    leaderboardList.innerHTML = '<p class="text-gray-400">Loading today\'s scores...</p>';
     try {
-        // The URL will be relative to your Vercel deployment
+        // The URL no longer needs the '?word=' parameter
         const response = await fetch('/api/leaderboard'); 
         const scores = await response.json();
 
         if (scores.length === 0) {
-            leaderboardList.innerHTML = '<p class="text-gray-400">No scores yet. Be the first!</p>';
+            leaderboardList.innerHTML = '<p class="text-gray-400">No scores yet today. Be the first!</p>';
             return;
         }
 
@@ -385,7 +385,7 @@ async function endGame() {
         copyButton.classList.add('hidden');
     }
 
-    // --- LEADERBOARD LOGIC (No changes needed here) ---
+    // --- LEADERBOARD LOGIC ---
     if (totalScore > 0) {
         const playerName = await getPlayerName();
         if (playerName && playerName.trim()) {
