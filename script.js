@@ -1,23 +1,27 @@
 // --- GAME DATA ---
-const sourceWord = 'POINTER';
-const uniqueChars = [...new Set(sourceWord.split(''))].sort();
-const possibleWords = [
-    // 'eon', 'eir', 'ent', 'eon', 'ern', 'ion', 'ire', 'net', 'nip', 'nit', 'nor', 'not', 'one', 'ope', 'opt', 'ore',
-    // 'ort', 'pen', 'per', 'pet', 'pie', 'pin', 'pit', 'poi', 'pon', 'pot', 'pro', 'rei', 'rep', 'ret', 'rin', 'rip',
-    // 'roe', 'rot', 'ten', 'tie', 'tin', 'tip', 'toe', 'ton', 'top', 'tor', 'tri', 'inept', 'inter', 'intro', 'irone',
-    // 'netop', 'nitro', 'noire', 'niter', 'nitre', 'nope', 'note', 'often', 'ofter', 'opine', 'opter', 'orient', 'orpin',
-    // 'pein', 'pent', 'peon', 'peri', 'pert', 'pine', 'pinto', 'pion', 'pirn', 'poet', 'point', 'ponte', 'pore', 'port',
-    // 'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
-    // 'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
-    // 'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
-    'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor','nope',
-    'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
-    'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','point','pointer','pone','pont','pontie',
-    'pore','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
-    'repot','ret','rin','rip','ripe','ripen','rite','roe','ropent','rope','rot','rote','roti','ten','tenio','tenor','tern',
-    'tie','tin','tine','tip','tire','tiro','toe','ton','tone','toner','tonier','top','tope','toper','topi','tor','tore','tori',
-    'torn','trine','trio','trip','tripe','tron','trope','tropine'
-].map(word => word.toLowerCase());
+// const sourceWord = 'POINTER';
+// const uniqueChars = [...new Set(sourceWord.split(''))].sort();
+// const possibleWords = [
+//     // 'eon', 'eir', 'ent', 'eon', 'ern', 'ion', 'ire', 'net', 'nip', 'nit', 'nor', 'not', 'one', 'ope', 'opt', 'ore',
+//     // 'ort', 'pen', 'per', 'pet', 'pie', 'pin', 'pit', 'poi', 'pon', 'pot', 'pro', 'rei', 'rep', 'ret', 'rin', 'rip',
+//     // 'roe', 'rot', 'ten', 'tie', 'tin', 'tip', 'toe', 'ton', 'top', 'tor', 'tri', 'inept', 'inter', 'intro', 'irone',
+//     // 'netop', 'nitro', 'noire', 'niter', 'nitre', 'nope', 'note', 'often', 'ofter', 'opine', 'opter', 'orient', 'orpin',
+//     // 'pein', 'pent', 'peon', 'peri', 'pert', 'pine', 'pinto', 'pion', 'pirn', 'poet', 'point', 'ponte', 'pore', 'port',
+//     // 'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
+//     // 'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
+//     // 'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
+//     'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor','nope',
+//     'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
+//     'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','point','pointer','pone','pont','pontie',
+//     'pore','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
+//     'repot','ret','rin','rip','ripe','ripen','rite','roe','ropent','rope','rot','rote','roti','ten','tenio','tenor','tern',
+//     'tie','tin','tine','tip','tire','tiro','toe','ton','tone','toner','tonier','top','tope','toper','topi','tor','tore','tori',
+//     'torn','trine','trio','trip','tripe','tron','trope','tropine'
+// ].map(word => word.toLowerCase());
+
+let sourceWord = '';
+let uniqueChars = [];
+let possibleWords = [];
 
 // --- STATE VARIABLES ---
 // let guessedWords = {}; // Now stores { word: { points, time } }
@@ -66,14 +70,41 @@ function setupUI() {
 /**
  * Starts the game.
  */
-function startGame() {
-    startPopup.classList.add('hidden');
-    gameContainer.classList.remove('hidden');
-    gameContainer.classList.add('fade-in');
-    wordInput.focus();
-    timerId = setInterval(updateTimer, 1000);
-}
+async function startGame() {
+    // Show loading indicator and disable the button
+    const startButton = document.getElementById('start-button');
+    const loadingIndicator = document.getElementById('loading-indicator');
+    startButton.disabled = true;
+    loadingIndicator.classList.remove('hidden');
 
+    try {
+        // Fetch a random word from our new API
+        const response = await fetch('/api/get-word');
+        if (!response.ok) {
+            throw new Error('Failed to load word');
+        }
+        const wordData = await response.json();
+
+        // Assign the fetched data to our variables
+        sourceWord = wordData.sourceWord.toUpperCase();
+        possibleWords = wordData.possibleWords.map(word => word.toLowerCase());
+        uniqueChars = [...new Set(sourceWord.split(''))].sort();
+
+        // Now that we have the data, set up the UI and start the game
+        setupUI(); // We need to call this again to draw the new letters
+
+        startPopup.classList.add('hidden');
+        gameContainer.classList.remove('hidden');
+        gameContainer.classList.add('fade-in');
+        wordInput.focus();
+        timerId = setInterval(updateTimer, 1000);
+
+    } catch (error) {
+        console.error(error);
+        loadingIndicator.textContent = 'Could not load word. Please try again.';
+        startButton.disabled = false; // Re-enable button on error
+    }
+}
 /**
  * Updates the timer and ends the game if time is up.
  */
