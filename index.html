@@ -48,14 +48,10 @@
                     <!-- Characters will be injected here -->
                 </div>
             </div>
-            
-            <!-- Custom Input Display -->
-            <div id="guess-display-container" class="relative" onclick="document.getElementById('word-input').focus()">
-                <div id="guess-display" class="flex justify-center gap-2 md:gap-3">
-                    <!-- Input boxes will be injected here -->
-                </div>
-                <input type="text" id="word-input" class="absolute top-0 left-0 w-full h-full opacity-0 cursor-text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-            </div>
+
+            <form id="word-form" class="mt-4">
+                <input type="text" id="word-input" class="w-full" placeholder="Type your word..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            </form>
         </div>
     </div>
 

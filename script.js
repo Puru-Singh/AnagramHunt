@@ -10,7 +10,7 @@ const possibleWords = [
     // 'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
     // 'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
     // 'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
-    'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor',
+    'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor','nope',
     'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
     'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','point','pointer','pone','pont','pontie',
     'pore','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
@@ -45,6 +45,7 @@ const copyButton = document.getElementById('copy-button');
 const popupOverlay = document.getElementById('popup-overlay');
 const nameForm = document.getElementById('name-form');
 const nameInput = document.getElementById('name-input');
+
 /**
  * Initializes the game UI.
  */
@@ -53,26 +54,6 @@ function setupUI() {
         `<div class="bg-black/20 border border-secondary-color/50 text-accent-color w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-xl md:text-2xl font-bold rounded-lg">${char}</div>`
     ).join('');
 
-    guessDisplay.innerHTML = sourceWord.split('').map(() =>
-        `<div class="input-box bg-black/20 border-2 border-secondary-color/40 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center text-2xl md:text-3xl font-bold rounded-lg uppercase"></div>`
-    ).join('');
-}
-
-/**
- * Updates the custom input display based on the hidden input field.
- */
-function updateGuessDisplay() {
-    const guess = wordInput.value.toUpperCase();
-    const boxes = guessDisplay.querySelectorAll('.input-box');
-    boxes.forEach((box, index) => {
-        const char = guess[index];
-        box.textContent = char || '';
-        if (char) {
-            box.classList.add('filled');
-        } else {
-            box.classList.remove('filled');
-        }
-    });
 }
 
 /**
@@ -130,7 +111,7 @@ function handleWordSubmit(e) {
     }
 
     wordInput.value = '';
-    updateGuessDisplay();
+    //updateGuessDisplay();
 }
 
 /**
@@ -195,52 +176,7 @@ async function fetchAndDisplayLeaderboard() {
     }
 }
 
-// Replace your existing endGame function with this new version
-// async function endGame() {
-//     clearInterval(timerId);
-//     gameContainer.classList.add('hidden');
-//     gameOverScreen.classList.remove('hidden');
-
-//     finalScoreDisplay.textContent = totalScore;
-//     const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
-
-//     // ... (keep the existing code that populates finalWordsList) ...
-//     if (sortedWords.length > 0) {
-//          finalWordsList.innerHTML = `
-//             <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
-//                 <span>Word</span>
-//                 <span class="text-center">Points</span>
-//                 <span class="text-right">Time Taken</span>
-//             </div>
-//             ${sortedWords.map(([word, data]) =>
-//             `<div class="grid grid-cols-3 gap-x-4 text-left py-1">
-//                 <span>${word}</span>
-//                 <span class="font-bold accent-text text-center">${data.points}</span>
-//                 <span class="text-gray-400 text-right">+${data.time}s</span>
-//             </div>`
-//         ).join('')}`;
-//      } else {
-//         finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
-//         copyButton.classList.add('hidden'); // Hide copy button if no words
-//     }
-
-//     // --- NEW CODE FOR LEADERBOARD ---
-//     if (totalScore > 0) {
-//         const playerName = prompt("Time's up! Enter your name for the leaderboard:");
-//         if (playerName) {
-//             await fetch('/api/add-score', {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ name: playerName.trim(), score: totalScore }),
-//             });
-//         }
-//     }
-
-//     // Fetch and show the leaderboard after submitting the score
-//     fetchAndDisplayLeaderboard();
-// }
-
-// Replace your existing endGame function with this new version
+// EndGame function
 async function endGame() {
     clearInterval(timerId);
     gameContainer.classList.add('hidden');
@@ -330,17 +266,10 @@ function getPlayerName() {
 // This ensures the script runs after the HTML document is fully loaded.
 document.addEventListener('DOMContentLoaded', () => {
     setupUI();
+    const form = document.getElementById('word-form'); // Get the form from HTML
 
     // Attach event listeners after the DOM is ready
     startButton.addEventListener('click', startGame);
-    wordInput.addEventListener('input', updateGuessDisplay);
     copyButton.addEventListener('click', copyResultsToClipboard);
-
-    // Need to wrap the submit listener in a form for Enter key to work
-    const form = document.createElement('form');
-    form.id = 'word-form';
     form.addEventListener('submit', handleWordSubmit);
-    const guessContainer = document.getElementById('guess-display-container');
-    guessContainer.parentNode.insertBefore(form, guessContainer);
-    form.appendChild(guessContainer);
 });

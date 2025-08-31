@@ -73,6 +73,36 @@ h1, h2, h3 { color: var(--accent-color); }
     transform: scale(1.05);
 }
 
+/* In style.css */
+
+/* --- Component Styles --- */
+/* ... other styles ... */
+
+/* New styles for the single text input */
+#word-input {
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 9999px; /* This creates the pill shape */
+    padding: 0.75rem 1.5rem;
+    color: var(--text-light);
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: border-color 0.3s ease;
+}
+
+#word-input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+}
+
+#word-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+    font-weight: normal;
+    text-transform: none;
+}
+
 /* Themed Scrollbar for final score screen */
 #final-words-list::-webkit-scrollbar {
     width: 8px;
