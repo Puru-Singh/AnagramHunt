@@ -97,6 +97,11 @@ h1, h2, h3 { color: var(--accent-color); }
     border-color: var(--accent-color);
 }
 
+#word-input.streak-active {
+    border-color: #FFD700; 
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Glow */
+}
+
 #word-input::placeholder {
     color: rgba(255, 255, 255, 0.4);
     font-weight: normal;

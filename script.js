@@ -188,54 +188,63 @@ function preprocessWord(word) {
 // }
 function handleWordSubmit(e) {
     e.preventDefault();
-    const rawWord = wordInput.value;
-    if (!rawWord) return;
+    try {
+        const rawWord = wordInput.value;
+        if (!rawWord) return;
 
-    const processedWord = preprocessWord(rawWord);
+        const processedWord = preprocessWord(rawWord);
 
-    if (possibleWords.includes(processedWord) && !guessedWords.find(entry => entry.word === processedWord)) {
-        const now = performance.now();
-        const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000;
+        if (possibleWords.includes(processedWord) && !guessedWords.find(entry => entry.word === processedWord)) {
+            const now = performance.now();
+            const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000;
 
-        if (lastGuessTimestamp === 0 || timeSinceLastGuess > 3) {
-            streakCount = 1;
-            isStreakActive = false;
-        } else {
-            streakCount++;
-        }
-        lastGuessTimestamp = now;
-
-        let bonusPoints = 0;
-        if (!isStreakActive && streakCount >= 3) {
-            isStreakActive = true;
-            totalScore += 3; // Add +1 for this word and the previous two
-            // Update the last two words in the array to give them their bonus
-            if (guessedWords.length >= 2) {
-                guessedWords[guessedWords.length - 1].bonus = 1;
-                guessedWords[guessedWords.length - 2].bonus = 1;
+            // If the player was too slow, reset the streak
+            if (lastGuessTimestamp === 0 || timeSinceLastGuess > 3) {
+                streakCount = 1;
+                isStreakActive = false;
+                wordInput.classList.remove('streak-active'); // <-- ADD THIS LINE
+            } else {
+                streakCount++;
             }
+            lastGuessTimestamp = now;
+
+            let bonusPoints = 0;
+            // Check if a new streak has just been achieved
+            if (!isStreakActive && streakCount >= 3) {
+                isStreakActive = true;
+                wordInput.classList.add('streak-active'); // <-- ADD THIS LINE
+
+                // Go back and add a bonus to the two words that started the streak
+                if (guessedWords.length >= 2) {
+                    guessedWords[guessedWords.length - 1].bonus = 1;
+                    guessedWords[guessedWords.length - 2].bonus = 1;
+                }
+            }
+
+            if (isStreakActive) {
+                bonusPoints = 1;
+            }
+
+            const points = processedWord.length;
+            // IMPORTANT: Don't add bonus points to totalScore here, it's done retroactively or in updateScoreboard
+            totalScore += points;
+
+            const currentTime = 60 - timeLeft;
+            const timeTaken = currentTime - lastGuessTime;
+            lastGuessTime = currentTime;
+
+            guessedWords.push({ word: processedWord, points: points, bonus: bonusPoints, time: timeTaken });
+            updateScoreboard();
+
+        } else {
+            showNotification();
         }
 
-        if (isStreakActive) {
-            bonusPoints = 1;
-        }
-
-        const points = processedWord.length;
-        // IMPORTANT: Don't add bonus points to totalScore here, it's done retroactively or in updateScoreboard
-        totalScore += points;
-
-        const currentTime = 60 - timeLeft;
-        const timeTaken = currentTime - lastGuessTime;
-        lastGuessTime = currentTime;
-
-        guessedWords.push({ word: processedWord, points: points, bonus: bonusPoints, time: timeTaken });
-        updateScoreboard();
-
-    } else {
-        showNotification();
+    } catch (error) {
+        console.error("An error occurred during word submission:", error);
+    } finally {
+        wordInput.value = '';
     }
-
-    wordInput.value = ''; // This line will now be reached correctly.
 }
 
 /**
