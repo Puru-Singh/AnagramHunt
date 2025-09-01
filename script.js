@@ -35,6 +35,7 @@ let lastGuessTime = 0; // Time of the last successful guess
 let streakCount = 0;
 let lastGuessTimestamp = 0; // Tracks the precise time of the last guess
 let isStreakActive = false;
+let streakGlowTimerId = null;
 
 // --- DOM ELEMENTS ---
 const startPopup = document.getElementById('start-popup');
@@ -198,23 +199,27 @@ function handleWordSubmit(e) {
             const now = performance.now();
             const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000;
 
-            // If the player was too slow, reset the streak
+            // Always clear the previous glow timer on a successful guess
+            if (streakGlowTimerId) {
+                clearTimeout(streakGlowTimerId);
+            }
+
             if (lastGuessTimestamp === 0 || timeSinceLastGuess > 3) {
+                // Streak is broken or it's the first word
                 streakCount = 1;
                 isStreakActive = false;
-                wordInput.classList.remove('streak-active'); // <-- ADD THIS LINE
+                wordInput.classList.remove('streak-active'); // Ensure glow is off
             } else {
+                // Streak continues
                 streakCount++;
             }
             lastGuessTimestamp = now;
 
             let bonusPoints = 0;
-            // Check if a new streak has just been achieved
+            // Check if a streak becomes active
             if (!isStreakActive && streakCount >= 3) {
                 isStreakActive = true;
-                wordInput.classList.add('streak-active'); // <-- ADD THIS LINE
-
-                // Go back and add a bonus to the two words that started the streak
+                // Retroactively add bonus to the two words that started the streak
                 if (guessedWords.length >= 2) {
                     guessedWords[guessedWords.length - 1].bonus = 1;
                     guessedWords[guessedWords.length - 2].bonus = 1;
@@ -223,23 +228,31 @@ function handleWordSubmit(e) {
 
             if (isStreakActive) {
                 bonusPoints = 1;
+                wordInput.classList.add('streak-active'); // Turn on the glow
+
+                // Set a new timer that will turn the glow off after 3 seconds
+                streakGlowTimerId = setTimeout(() => {
+                    wordInput.classList.remove('streak-active');
+                }, 3000);
             }
 
-            const points = processedWord.length;
-            // IMPORTANT: Don't add bonus points to totalScore here, it's done retroactively or in updateScoreboard
-            totalScore += points;
-
+            // --- (The rest of the scoring logic remains exactly the same) ---
             const currentTime = 60 - timeLeft;
             const timeTaken = currentTime - lastGuessTime;
             lastGuessTime = currentTime;
 
-            guessedWords.push({ word: processedWord, points: points, bonus: bonusPoints, time: timeTaken });
+            guessedWords.push({
+                word: processedWord,
+                points: processedWord.length,
+                bonus: bonusPoints,
+                time: timeTaken
+            });
+
             updateScoreboard();
 
         } else {
             showNotification();
         }
-
     } catch (error) {
         console.error("An error occurred during word submission:", error);
     } finally {
