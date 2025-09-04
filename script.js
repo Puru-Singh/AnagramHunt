@@ -474,8 +474,12 @@ async function endGame() {
 /**
  * Copies the list of guessed words to the clipboard.
  */
+/**
+ * Copies the list of guessed words to the clipboard.
+ */
 function copyResultsToClipboard() {
-    const wordsToCopy = Object.keys(guessedWords).join(', ');
+    // Correctly map the array to get the 'word' property from each entry
+    const wordsToCopy = guessedWords.map(entry => entry.word).join(', ');
     if (!wordsToCopy) return;
 
     // Use a temporary textarea to hold the text and copy it
