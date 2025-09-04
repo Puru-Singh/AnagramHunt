@@ -128,21 +128,25 @@ h1, h2, h3 { color: var(--accent-color); }
 
 /* Themed Scrollbar for final score screen */
 #final-words-list::-webkit-scrollbar,
-#guessed-words-container::-webkit-scrollbar {
+#guessed-words-container::-webkit-scrollbar,
+#leaderboard-list::-webkit-scrollbar-track {
     width: 8px;
 }
 #final-words-list::-webkit-scrollbar-track,
-#guessed-words-container::-webkit-scrollbar {
+#guessed-words-container::-webkit-scrollbar,
+#leaderboard-list::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.2);
     border-radius: 10px;
 }
 #final-words-list::-webkit-scrollbar-thumb,
-#guessed-words-container::-webkit-scrollbar {
+#guessed-words-container::-webkit-scrollbar,
+#leaderboard-list::-webkit-scrollbar-track {
     background: var(--secondary-color);
     border-radius: 10px;
 }
 #final-words-list::-webkit-scrollbar-thumb:hover,
-#guessed-words-container::-webkit-scrollbar {
+#guessed-words-container::-webkit-scrollbar,
+#leaderboard-list::-webkit-scrollbar-track {
     background: #D84040;
 }
 #popup-overlay {
