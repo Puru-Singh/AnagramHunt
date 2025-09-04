@@ -125,6 +125,36 @@ function preprocessWord(word) {
 }
 
 /**
+ * Resets the game state and UI to their initial values.
+ */
+function resetGame() {
+    // Reset state variables
+    totalScore = 0;
+    timeLeft = 60;
+    guessedWords = [];
+    streakCount = 0;
+    lastGuessTimestamp = 0;
+    isStreakActive = false;
+    streakGlowTimerId = null;
+    if (timerId) clearInterval(timerId);
+
+    // Reset UI Elements
+    totalScoreDisplay.textContent = '0';
+    timerDisplay.textContent = '60';
+    wordInput.value = '';
+    wordInput.classList.remove('streak-active', 'time-bonus-glow');
+    guessedWordsList.innerHTML = '';
+    guessedWordsPlaceholder.classList.remove('hidden');
+    document.getElementById('start-button').disabled = false;
+    document.getElementById('loading-indicator').classList.add('hidden');
+    copyButton.textContent = 'Copy Words';
+
+    // Hide the game over screen and show the start popup
+    gameOverScreen.classList.add('hidden');
+    startPopup.classList.remove('hidden');
+}
+
+/**
  * Handles the word submission logic.
  */
 // function handleWordSubmit(e) {
@@ -488,9 +518,12 @@ function getPlayerName() {
 document.addEventListener('DOMContentLoaded', () => {
     setupUI();
     const form = document.getElementById('word-form'); // Get the form from HTML
+    const newGameButton = document.getElementById('new-game-button'); // Get the new button
+
 
     // Attach event listeners after the DOM is ready
     startButton.addEventListener('click', startGame);
     copyButton.addEventListener('click', copyResultsToClipboard);
     form.addEventListener('submit', handleWordSubmit);
+    newGameButton.addEventListener('click', resetGame);
 });
