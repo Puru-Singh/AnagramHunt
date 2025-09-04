@@ -41,6 +41,17 @@ body::before {
 }
 #notification { transition: opacity 0.5s, transform 0.5s; }
 
+@keyframes flash-green {
+  0%, 100% {
+    color: var(--accent-color);
+    transform: scale(1);
+  }
+  50% {
+    color: #4ade80; /* A bright green */
+    transform: scale(1.1);
+  }
+}
+
 /* --- Component Styles --- */
 .glass-container {
     background-color: rgba(53, 28, 28, 0.6); /* Darker version of primary for depth */
@@ -73,10 +84,17 @@ h1, h2, h3 { color: var(--accent-color); }
     transform: scale(1.05);
 }
 
-/* In style.css */
-
 /* --- Component Styles --- */
-/* ... other styles ... */
+
+#word-input.time-bonus-glow {
+    border-color: #4ade80; /* Bright Green */
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.6);
+}
+
+/* NEW: Class to apply the flash animation to the timer */
+#timer.timer-flash {
+    animation: flash-green 1s ease-out;
+}
 
 /* New styles for the single text input */
 #word-input {

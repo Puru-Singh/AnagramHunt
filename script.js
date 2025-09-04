@@ -196,6 +196,25 @@ function handleWordSubmit(e) {
         const processedWord = preprocessWord(rawWord);
 
         if (possibleWords.includes(processedWord) && !guessedWords.find(entry => entry.word === processedWord)) {
+
+            // --- NEW: TIME BONUS LOGIC FOR 7-LETTER WORDS ---
+            if (processedWord.length === 7) {
+                // 1. Add 7 seconds to the timer
+                timeLeft += 7;
+                timerDisplay.textContent = timeLeft;
+
+                // 2. Add green glow to the input for 2 seconds
+                wordInput.classList.add('time-bonus-glow');
+                setTimeout(() => {
+                    wordInput.classList.remove('time-bonus-glow');
+                }, 2000);
+
+                // 3. Add a flash effect to the timer
+                timerDisplay.classList.add('timer-flash');
+                setTimeout(() => {
+                    timerDisplay.classList.remove('timer-flash');
+                }, 1000); // Remove after animation ends
+            }
             const now = performance.now();
             const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000;
 
