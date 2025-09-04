@@ -225,6 +225,21 @@ function handleWordSubmit(e) {
 
         const processedWord = preprocessWord(rawWord);
 
+        //improve this later.
+
+        const isAlreadyGuessed = guessedWords.find(entry => entry.word === processedWord);
+        const isValidWord = possibleWords.includes(processedWord);
+
+        if (isAlreadyGuessed) {
+            showNotification("Word already guessed!");
+            return; // Stop the function here
+        }
+
+        if (!isValidWord) {
+            showNotification("Invalid Word!");
+            return; // Stop the function here
+        }
+
         if (possibleWords.includes(processedWord) && !guessedWords.find(entry => entry.word === processedWord)) {
 
             // --- NEW: TIME BONUS LOGIC FOR 7-LETTER WORDS ---

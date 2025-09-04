@@ -129,24 +129,27 @@ h1, h2, h3 { color: var(--accent-color); }
 /* Themed Scrollbar for final score screen */
 #final-words-list::-webkit-scrollbar,
 #guessed-words-container::-webkit-scrollbar,
-#leaderboard-list::-webkit-scrollbar-track {
+#leaderboard-list::-webkit-scrollbar {
     width: 8px;
 }
+
 #final-words-list::-webkit-scrollbar-track,
-#guessed-words-container::-webkit-scrollbar,
+#guessed-words-container::-webkit-scrollbar-track,
 #leaderboard-list::-webkit-scrollbar-track {
     background: rgba(0,0,0,0.2);
     border-radius: 10px;
 }
+
 #final-words-list::-webkit-scrollbar-thumb,
-#guessed-words-container::-webkit-scrollbar,
-#leaderboard-list::-webkit-scrollbar-track {
+#guessed-words-container::-webkit-scrollbar-thumb,
+#leaderboard-list::-webkit-scrollbar-thumb {
     background: var(--secondary-color);
     border-radius: 10px;
 }
+
 #final-words-list::-webkit-scrollbar-thumb:hover,
-#guessed-words-container::-webkit-scrollbar,
-#leaderboard-list::-webkit-scrollbar-track {
+#guessed-words-container::-webkit-scrollbar-thumb:hover,
+#leaderboard-list::-webkit-scrollbar-thumb:hover {
     background: #D84040;
 }
 #popup-overlay {
