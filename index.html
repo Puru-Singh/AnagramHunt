@@ -67,12 +67,14 @@
         </div>
         <div class="flex justify-between items-center mt-6 mb-3">
             <h3 class="text-xl font-semibold">Words You Found:</h3>
-            <button id="copy-button" class="bg-black/20 hover:bg-black/40 text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
-                Copy Words
-            </button>
-            <button id="new-game-button" class="button-primary text-sm font-semibold py-2 px-4 rounded-lg transition-colors ml-2">
-                New Game
-            </button>
+            <div class="flex justify-end">
+                <button id="copy-button" class="bg-black/20 hover:bg-black/40 text-sm font-semibold py-2 px-4 rounded-lg transition-colors">
+                    Copy Words
+                </button>
+                <button id="new-game-button" class="button-primary text-sm font-semibold py-2 px-4 rounded-lg transition-colors ml-2">
+                    New Game
+                </button>
+            </div>
         </div>
         <div id="final-words-list" class="w-full max-h-64 text-lg p-4 rounded-lg overflow-y-auto bg-black/20">
             <!-- Final word list will be injected here -->
