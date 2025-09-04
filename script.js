@@ -1,23 +1,4 @@
 // --- GAME DATA ---
-// const sourceWord = 'POINTER';
-// const uniqueChars = [...new Set(sourceWord.split(''))].sort();
-// const possibleWords = [
-//     // 'eon', 'eir', 'ent', 'eon', 'ern', 'ion', 'ire', 'net', 'nip', 'nit', 'nor', 'not', 'one', 'ope', 'opt', 'ore',
-//     // 'ort', 'pen', 'per', 'pet', 'pie', 'pin', 'pit', 'poi', 'pon', 'pot', 'pro', 'rei', 'rep', 'ret', 'rin', 'rip',
-//     // 'roe', 'rot', 'ten', 'tie', 'tin', 'tip', 'toe', 'ton', 'top', 'tor', 'tri', 'inept', 'inter', 'intro', 'irone',
-//     // 'netop', 'nitro', 'noire', 'niter', 'nitre', 'nope', 'note', 'often', 'ofter', 'opine', 'opter', 'orient', 'orpin',
-//     // 'pein', 'pent', 'peon', 'peri', 'pert', 'pine', 'pinto', 'pion', 'pirn', 'poet', 'point', 'ponte', 'pore', 'port',
-//     // 'pote', 'prion', 'print', 'prone', 'protein', 'ptr', 'rein', 'rent', 'repin', 'repot', 'ripe', 'ripen', 'rite',
-//     // 'rope', 'rote', 'tenor', 'tern', 'tier', 'tine', 'tire', 'tone', 'toner', 'tope', 'toper', 'tore', 'tori', 'torn',
-//     // 'trip', 'tripe', 'trop', 'trone', 'tropin', 'repoint'
-//     'eon','ern','inert','inter','intern','into','intro','ion','ire','iron','irone','net','nip','nit','nitro','noir','nor','nope',
-//     'nori','not','note','noter','one','open','opine','opt','ore','orpin','ort','pen','pent','peon','per','peri','pert','pet',
-//     'pie','pier','pin','pine','piner','pinot','pint','pinto','pion','pirn','pit','poet','poi','point','pointer','pone','pont','pontie',
-//     'pore','port','pot','pre','prion','pro','prone','protei','protein','rein','rent','rep','repin','repo','repoint',
-//     'repot','ret','rin','rip','ripe','ripen','rite','roe','ropent','rope','rot','rote','roti','ten','tenio','tenor','tern',
-//     'tie','tin','tine','tip','tire','tiro','toe','ton','tone','toner','tonier','top','tope','toper','topi','tor','tore','tori',
-//     'torn','trine','trio','trip','tripe','tron','trope','tropine'
-// ].map(word => word.toLowerCase());
 
 let sourceWord = '';
 let uniqueChars = [];
@@ -154,69 +135,7 @@ function resetGame() {
     startPopup.classList.remove('hidden');
 }
 
-/**
- * Handles the word submission logic.
- */
-// function handleWordSubmit(e) {
-//     e.preventDefault();
-//     const rawWord = wordInput.value;
-//     if (!rawWord) return;
 
-//     const processedWord = preprocessWord(rawWord);
-
-//     // if (possibleWords.includes(processedWord) && !guessedWords.hasOwnProperty(processedWord)) {
-//     if (possibleWords.includes(processedWord) && !guessedWords.find(entry => entry.word === processedWord)) {
-//         // --- STREAK LOGIC START ---
-//         const now = performance.now(); // Get high-precision timestamp
-//         const timeSinceLastGuess = (now - lastGuessTimestamp) / 1000; // Time in seconds
-
-//         // If it's the first guess or the player was too slow, reset streak
-//         if (lastGuessTimestamp === 0 || timeSinceLastGuess > 3) {
-//             streakCount = 1;
-//             isStreakActive = false;
-//         } else {
-//             // Player was fast enough, increment streak
-//             streakCount++;
-//         }
-//         lastGuessTimestamp = now; // Update timestamp for the next guess
-
-//         let bonusPoints = 0;
-//         // Check if a new streak has just been achieved
-//         if (!isStreakActive && streakCount >= 3) {
-//             isStreakActive = true;
-//             // Retroactively award bonus points for the 3 words that started the streak
-//             totalScore += 3; 
-//             // We need to find the keys of the last 2 guessed words to update their bonus
-//             const guessedKeys = Object.keys(guessedWords);
-//             const lastTwoKeys = guessedKeys.slice(-2);
-//             lastTwoKeys.forEach(key => {
-//                 guessedWords[key].bonus = 1;
-//             });
-//         }
-
-//         if (isStreakActive) {
-//             bonusPoints = 1;
-//         }
-//         // --- STREAK LOGIC END ---
-
-//         const points = processedWord.length;
-//         totalScore += points; // Add base points
-
-//         const currentTime = 60 - timeLeft;
-//         const timeTaken = currentTime - lastGuessTime;
-//         lastGuessTime = currentTime;
-
-//         // Store all word data, including bonus
-//         //guessedWords[processedWord] = { points: points, bonus: bonusPoints, time: timeTaken };
-//         guessedWords.push({ word: processedWord, points: points, bonus: bonusPoints, time: timeTaken });
-//         updateScoreboard();
-
-//     } else {
-//         showNotification();
-//     }
-
-//     wordInput.value = '';
-// }
 function handleWordSubmit(e) {
     e.preventDefault();
     try {
@@ -392,49 +311,7 @@ async function fetchAndDisplayLeaderboard() {
     }
 }
 
-// EndGame function
-// async function endGame() {
-//     clearInterval(timerId);
-//     gameContainer.classList.add('hidden');
-//     gameOverScreen.classList.remove('hidden');
-
-//     finalScoreDisplay.textContent = totalScore;
-//     // The code to display your found words remains the same...
-//     const sortedWords = Object.entries(guessedWords).sort((a, b) => b[1].points - a[1].points || a[0].localeCompare(b[0]));
-//     if (sortedWords.length > 0) {
-//          finalWordsList.innerHTML = `
-//             <div class="grid grid-cols-3 gap-x-4 text-left font-bold border-b border-secondary-color/30 pb-2 mb-2">
-//                 <span>Word</span>
-//                 <span class="text-center">Points</span>
-//                 <span class="text-right">Time Taken</span>
-//             </div>
-//             ${sortedWords.map(([word, data]) =>
-//             `<div class="grid grid-cols-3 gap-x-4 text-left py-1">
-//                 <span>${word}</span>
-//                 <span class="font-bold accent-text text-center">${data.points}</span>
-//                 <span class="text-gray-400 text-right">+${data.time}s</span>
-//             </div>`
-//         ).join('')}`;
-//      } else {
-//         finalWordsList.innerHTML = `<p class="text-center text-gray-400">You didn't find any words.</p>`;
-//         copyButton.classList.add('hidden');
-//     }
-
-//     // --- UPDATED LEADERBOARD LOGIC ---
-//     if (totalScore > 0) {
-//         const playerName = await getPlayerName(); // Wait for user to submit name
-//         if (playerName && playerName.trim()) {
-//             await fetch('/api/add-score', {
-//                 method: 'POST',
-//                 headers: { 'Content-Type': 'application/json' },
-//                 body: JSON.stringify({ name: playerName.trim(), score: totalScore }),
-//             });
-//         }
-//     }
-
-//     // Fetch and show the leaderboard after submitting the score
-//     fetchAndDisplayLeaderboard();
-// }
+//Endgame function
 async function endGame() {
     clearInterval(timerId);
     gameContainer.classList.add('hidden');
@@ -486,9 +363,6 @@ async function endGame() {
     fetchAndDisplayLeaderboard();
 }
 
-/**
- * Copies the list of guessed words to the clipboard.
- */
 /**
  * Copies the list of guessed words to the clipboard.
  */
