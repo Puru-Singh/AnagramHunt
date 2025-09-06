@@ -10,7 +10,9 @@ let guessedWords = [];
 let totalScore = 0;
 let timeLeft = 60;
 let timerId = null;
-let lastGuessTime = 0; // Time of the last successful guess
+// let lastGuessTime = 0; // Time of the last successful guess
+let elapsedTime = 0;
+let lastGuessElapsedTime = 0;
 
 // Variables for maintaining streak.
 let streakCount = 0;
@@ -74,6 +76,9 @@ async function startGame() {
 
         // Now that we have the data, set up the UI and start the game
         setupUI(); // We need to call this again to draw the new letters
+        
+        elapsedTime = 0;
+        lastGuessElapsedTime = 0;
 
         startPopup.classList.add('hidden');
         gameContainer.classList.remove('hidden');
@@ -92,6 +97,7 @@ async function startGame() {
  */
 function updateTimer() {
     timeLeft--;
+    elapsedTime++;
     timerDisplay.textContent = timeLeft;
     if (timeLeft <= 0) {
         endGame();
@@ -112,6 +118,8 @@ function resetGame() {
     // Reset state variables
     totalScore = 0;
     timeLeft = 60;
+    elapsedTime = 0;
+    lastGuessElapsedTime = 0;
     guessedWords = [];
     streakCount = 0;
     lastGuessTimestamp = 0;
@@ -219,10 +227,12 @@ function handleWordSubmit(e) {
                 }, 3000);
             }
 
-            // --- (The rest of the scoring logic remains exactly the same) ---
-            const currentTime = 60 - timeLeft;
-            const timeTaken = currentTime - lastGuessTime;
-            lastGuessTime = currentTime;
+            // const currentTime = 60 - timeLeft;
+            // const timeTaken = currentTime - lastGuessTime;
+            // lastGuessTime = currentTime;
+
+            const timeTaken = elapsedTime - lastGuessElapsedTime;
+            lastGuessElapsedTime = elapsedTime
 
             guessedWords.push({
                 word: processedWord,
